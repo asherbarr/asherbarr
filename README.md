@@ -23,10 +23,10 @@
 - **Music:** [Pear Desktop](https://github.com/pear-devs/pear-desktop) 🎧
 - **Browser:** Microsoft Edge 🌐
 - **Communication:** Beeper 💬
-- **Gaming:** Playnite | WeMod 🎮
-- **System & Customization:** Windhawk | StayFree | Rainmeter 🛠️
-- **Productivity & Utilities:** FDM (Free Download Manager) | OneDrive | Medisafe 📂
-- **Privacy & Security:** Surfshark VPN | UniGetUI 🛡️
+- **Gaming:** Playnite | WeMod | Medal.tv 🎮
+- **System & Customization:** Windhawk | StayFree (Screen time tracking across all devices) | Rainmeter 🛠️
+- **Productivity & Utilities:** UniGetUI | FDM (Free Download Manager) | OneDrive | Medisafe 📂
+- **Privacy & Security:** Surfshark VPN 🛡️
 
 ---
 
