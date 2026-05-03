@@ -20,18 +20,21 @@
 ---
 
 ## 🛠️ Software & Tools I Use
-I like to keep my setup clean and efficient. Here are some of my favorites:
+- **Music:** [Pear Desktop](https://github.com/pear-devs/pear-desktop) 🎧
+- **Browser:** Microsoft Edge 🌐
+- **System Tools:** UniGetUI 🛡️
+- **Customization:** Rainmeter 🎨
 
-- **Music:** [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music Client) 🎧
-- **Browser:** Microsoft Edge (for performance and built-in shopping tools) 🌐
-- **System Tools:** UniGetUI (for keeping all my software up to date) 🛡️
-- **Customization:** Rainmeter (for that perfect desktop look) 🎨
+---
+
+## 💻 My Hardware Setup
+- **PC Specs:** [Insert CPU/GPU here] 🖥️
+- **Peripherals:** [Insert Gear here] ⌨️
 
 ---
 
 ## 🌐 Connect With Me
-Feel free to reach out or follow my activity!
-
+[<img src="https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white">](https://steamcommunity.com/id/asherbarr/)
 [<img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">](https://discord.com/users/1386447462453084350)
 [<img src="https://img.shields.io/badge/Reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white">](https://www.reddit.com/user/asherbarr/)
 [<img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">](https://www.instagram.com/_osher.bar_/)
