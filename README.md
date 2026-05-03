@@ -12,6 +12,12 @@
 
 ---
 
+## 💡 Expertise
+- **Discord Bot Development:** Extensive knowledge in creating and managing custom Discord bots. 🤖
+- **Discord Server Design:** Specialized in designing professional, high-end Discord servers with complex structures and aesthetics. 🎨
+
+---
+
 ## 🛠️ Software & Tools I Use
 I like to keep my setup clean and efficient. Here are some of my favorites:
 
