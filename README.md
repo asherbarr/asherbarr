@@ -16,7 +16,7 @@
 I like to keep my setup clean and efficient. Here are some of my favorites:
 
 - **Music:** [Pear Desktop](https://github.com/pear-devs/pear-desktop) (YouTube Music Client) 🎧
-- **Browser:** Microsoft Edge (for performance and built-in shopping tools) / Google Chrome (for phone sync) 🌐
+- **Browser:** Microsoft Edge (for performance and built-in shopping tools) 🌐
 - **System Tools:** UniGetUI (for keeping all my software up to date) 🛡️
 - **Customization:** Rainmeter (for that perfect desktop look) 🎨
 
