@@ -22,8 +22,11 @@
 ## 🛠️ Software & Tools I Use
 - **Music:** [Pear Desktop](https://github.com/pear-devs/pear-desktop) 🎧
 - **Browser:** Microsoft Edge 🌐
-- **System Tools:** UniGetUI 🛡️
-- **Customization:** Rainmeter 🎨
+- **Communication:** Beeper 💬
+- **Gaming:** Playnite | WeMod 🎮
+- **System & Customization:** Windhawk | StayFree | Rainmeter 🛠️
+- **Productivity & Utilities:** FDM (Free Download Manager) | OneDrive | Medisafe 📂
+- **Privacy & Security:** Surfshark VPN | UniGetUI 🛡️
 
 ---
 
