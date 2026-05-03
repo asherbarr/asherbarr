@@ -28,8 +28,10 @@
 ---
 
 ## 💻 My Hardware Setup
-- **PC Specs:** [Insert CPU/GPU here] 🖥️
-- **Peripherals:** [Insert Gear here] ⌨️
+- **PC Specs:** Intel i7-9700 | RTX 2060 SUPER | 16GB RAM | 1TB NVMe SSD + 1TB HDD + 1TB External HDD 🖥️
+- **Monitors:** PHILIPS 272V8 (Main) | Samsung 24" CF390 (Curved) | DELL P2422H 📺
+- **Peripherals:** CORSAIR K55 CORE RGB | CORSAIR HARPOON RGB PRO | Xbox Wireless Controller 🎮
+- **Audio & Video:** Logitech G Pro Headset | Maono AU-A04 Mic | Logitech BRIO 4K Stream Edition 🎤
 
 ---
 
