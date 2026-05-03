@@ -13,6 +13,7 @@
 ---
 
 ## 💡 Expertise
+- **Programming Languages:** Python & Java 💻
 - **Discord Bot Development:** Extensive knowledge in creating and managing custom Discord bots. 🤖
 - **Discord Server Design:** Specialized in designing professional, high-end Discord servers with complex structures and aesthetics. 🎨
 
