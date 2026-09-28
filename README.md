@@ -1,6 +1,6 @@
 # 🚀 Hi, I'm Osher Bar! 👋
 
-### "Osher → 21yo. Chillin' in my own lane. Quality over quantity."
+### Osher → 21yo. Chillin' in my own lane. Quality over quantity.
 
 ---
 
