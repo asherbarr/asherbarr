@@ -46,6 +46,7 @@
 [<img src="https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white">](https://steamcommunity.com/id/asherbarr/)
 [<img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">](https://discord.com/users/1386447462453084350)
 [<img src="https://img.shields.io/badge/Reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white">](https://www.reddit.com/user/asherbarr/)
+[<img src="https://img.shields.io/badge/Trakt-ED1C24?style=for-the-badge&logo=trakt&logoColor=white">](https://app.trakt.tv/profile/ashsrbarr)
 
 ---
 
