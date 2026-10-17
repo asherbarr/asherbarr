@@ -31,13 +31,14 @@ All built for Linux only 🐧, all with Discord RPC (Rich Presence).
 ---
 
 ## 🛠️ Software & Tools I Use
-- **Music:** Spotify 🎧
-- **Browser:** Google Chrome 🌐
+- **Music:** YouTube Music (my own app) 🎧
+- **Browser:** Google Chrome | Zen Browser 🌐
 - **Communication:** Discord Only 💬
-- **Gaming:** Steam Client 🎮
-- **System & Customization:** GNOME Tweaks | Extension Manager | Fedora Linux 44 (GNOME/Wayland) 🐧
-- **Productivity & Utilities:** UniGetUI | FDM (Free Download Manager) | OneDrive | Medisafe 📂
-- **Privacy & Security:** Surfshark VPN 🛡️
+- **Streaming:** Stremio | Kick | YouTube (my own apps) 🎬
+- **Gaming:** Steam | Prism Launcher | Protontricks | Wine 🎮
+- **AI:** Claude | ChatGPT 🤖
+- **System & Customization:** Fedora Linux 44 (GNOME/Wayland) | Extension Manager | kitty 🐧
+- **Productivity & Utilities:** Free Download Manager | Thunderbird | rquickshare 📂
 
 ---
 
