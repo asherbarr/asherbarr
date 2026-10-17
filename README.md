@@ -60,10 +60,10 @@ All built for Linux only 🐧, all with Discord RPC (Rich Presence).
 
 ## 📊 My GitHub Stats
 <div align="center">
-  <img height="165" alt="GitHub stats" src="https://github-readme-stats.vercel.app/api?username=asherbarr&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&rank_icon=github&disable_animations=true" />
+  <img height="165" alt="GitHub stats" src="https://raw.githubusercontent.com/asherbarr/asherbarr/cards/stats.svg" />
   <img height="165" alt="Most used languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=asherbarr&layout=compact&theme=tokyonight&hide_border=true&langs_count=6&disable_animations=true" />
   <br />
-  <img alt="GitHub streak" src="https://streak-stats.demolab.com?user=asherbarr&theme=tokyonight&hide_border=true&disable_animations=true" />
+  <img alt="GitHub streak" src="https://raw.githubusercontent.com/asherbarr/asherbarr/cards/streak.svg" />
 </div>
 
 ---
