@@ -34,7 +34,7 @@ All built for Linux only 🐧, all with Discord RPC (Rich Presence).
 - **Music:** YouTube Music (my own app) 🎧
 - **Browser:** Google Chrome | Zen Browser 🌐
 - **Communication:** Discord Only 💬
-- **Streaming:** Kick | YouTube (my own apps) | Stremio (with my own Discord RPC) 🎬
+- **Watching:** Kick | YouTube (my own apps) | Stremio (with my own Discord RPC) 🎬
 - **Gaming:** Steam | Prism Launcher | Protontricks | Wine 🎮
 - **AI:** Claude | ChatGPT 🤖
 - **System & Customization:** Fedora Linux 44 (GNOME/Wayland) | Extension Manager | kitty 🐧
