@@ -44,7 +44,7 @@ All built for Linux only 🐧, all with Discord RPC (Rich Presence).
 ## 💻 My Hardware Setup
 - **PC Specs:** Intel i7-9700 | NVIDIA RTX 2060 SUPER | 32GB RAM (2x16GB Corsair Vengeance LPX DDR4-3200MHz) | ASUS PRIME B360M-C Motherboard | 1STPLAYER FK 6.0 600W PSU | Antec C5 ARGB Case | Fedora Linux 44 🖥️
 - **Storage:** WD_BLACK SN770 1TB NVMe SSD | Seagate BarraCuda 1TB HDD (ST1000DM010) 💾
-- **Monitors:** PHILIPS 272V8 27" (Main) | Samsung 24" CF390 (Curved) | DELL P2422H 24" 📺
+- **Monitors:** PHILIPS 272V8 27" (Main) | MAG G27IPS 27" 📺
 - **Peripherals:** CORSAIR K55 CORE RGB Keyboard | Onikuma CW917 Mouse | Xbox Wireless Controller | Meta Quest 2 256GB VR 🎮
 - **Audio & Video:** Logitech G Pro (Wired) Headset | Maono AU-A04 Mic | Logitech BRIO 4K Webcam | Winner 800W Speakers 🎤
 - **Mobile:** Samsung Galaxy S26 Ultra | Galaxy Buds 2 | Galaxy Watch 5 | Galaxy Tab S9 FE 📱
