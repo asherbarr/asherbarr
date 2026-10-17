@@ -49,7 +49,7 @@ All built for Linux only 🐧, all with Discord RPC (Rich Presence).
 - **Peripherals:** CORSAIR K55 CORE RGB Keyboard | Onikuma CW917 Mouse | Xbox Wireless Controller | Meta Quest 2 256GB VR 🎮
 - **Audio & Video:** Logitech G Pro (Wired) Headset | Maono AU-A04 Mic | Logitech BRIO 4K Webcam | Winner 800W Speakers 🎤
 - **Mobile:** Samsung Galaxy S26 Ultra | Galaxy Buds 2 | Galaxy Watch 5 | Galaxy Tab S9 FE 📱
-- **TV:** TCL Smart TV Pro 📺
+- **TV:** TCL 55P737 55" 4K Google TV 📺
 
 ---
 
