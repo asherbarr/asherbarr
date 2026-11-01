@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LiveMap</string>
+    <string name="settings">Settings</string>
+    <string name="widget_description">Live map that follows your location. Tap it to open Google Maps.</string>
+    <string name="open_in_maps">Open current location in Google Maps</string>
+    <string name="tracking_notification_title">LiveMap is tracking your location</string>
+    <string name="tracking_notification_text">Updating the home-screen map. Tap Stop to end tracking.</string>
+    <string name="stop">Stop</string>
+    <string name="resume_notification_title">Tracking paused</string>
+    <string name="resume_notification_text">Tap to resume live location on your home screen.</string>
+    <string name="channel_tracking">Live tracking</string>
+    <string name="channel_tracking_desc">Shown while the live map is following your location.</string>
+    <string name="channel_resume">Resume tracking</string>
+</resources>
