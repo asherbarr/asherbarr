@@ -103,8 +103,8 @@ class Prefs(context: Context) {
     }
 
     companion object {
-        const val MIN_ZOOM = 13
-        const val MAX_ZOOM = 18
+        const val MIN_ZOOM = 10
+        const val MAX_ZOOM = 19
         private const val KEY_TRACKING = "tracking"
         private const val KEY_INTERVAL = "interval_ms"
         private const val KEY_ZOOM = "zoom"

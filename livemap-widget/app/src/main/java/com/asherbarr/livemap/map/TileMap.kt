@@ -26,9 +26,10 @@ import kotlin.math.tan
 /**
  * Builds the widget map image from raster map tiles (Web Mercator, 256 px tiles).
  *
- * Tile sources (both free, no API key):
+ * Tile sources (all free, no API key):
  *  - Standard: OpenStreetMap  https://tile.openstreetmap.org  (ODbL, attribution required)
- *  - Satellite: Esri World Imagery (free for non-commercial use, attribution required)
+ *  - Satellite: Esri World Imagery + Esri road and place-name overlays
+ *    (free for non-commercial use, attribution required)
  *
  * Tiles are cached in memory and on disk (7 days), so a moving widget only downloads
  * the tiles it has not seen before.
@@ -36,21 +37,32 @@ import kotlin.math.tan
 object TileMap {
 
     private const val TILE = 256
-    private const val MAX_BITMAP_SIDE = 360 // keeps RemoteViews payload small
+    private const val MAX_BITMAP_SIDE = 640 // sharp enough, still a small RemoteViews payload
     private const val CACHE_TTL_MS = 7L * 24 * 60 * 60 * 1000
 
     private var memory: LruCache<String, Bitmap>? = null
 
-    private fun memCache(): LruCache<String, Bitmap> = memory ?: LruCache<String, Bitmap>(64).also { memory = it }
+    private fun memCache(): LruCache<String, Bitmap> = memory ?: LruCache<String, Bitmap>(96).also { memory = it }
+
+    /** One raster layer. Overlays are transparent PNGs drawn on top of the base layer. */
+    private class Layer(val key: String, val url: (Int, Int, Int) -> String, val base: Boolean)
+
+    private const val ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services"
+
+    private fun layers(style: MapStyle): List<Layer> = when (style) {
+        MapStyle.STANDARD -> listOf(
+            Layer("osm", { z, x, y -> "https://tile.openstreetmap.org/$z/$x/$y.png" }, base = true),
+        )
+        MapStyle.SATELLITE -> listOf(
+            Layer("esri-img", { z, x, y -> "$ESRI/World_Imagery/MapServer/tile/$z/$y/$x" }, base = true),
+            Layer("esri-roads", { z, x, y -> "$ESRI/Reference/World_Transportation/MapServer/tile/$z/$y/$x" }, base = false),
+            Layer("esri-places", { z, x, y -> "$ESRI/Reference/World_Boundaries_and_Places/MapServer/tile/$z/$y/$x" }, base = false),
+        )
+    }
 
     fun attribution(style: MapStyle) = when (style) {
         MapStyle.STANDARD -> "© OpenStreetMap"
         MapStyle.SATELLITE -> "© Esri, Maxar"
-    }
-
-    private fun tileUrl(style: MapStyle, z: Int, x: Int, y: Int): String = when (style) {
-        MapStyle.STANDARD -> "https://tile.openstreetmap.org/$z/$x/$y.png"
-        MapStyle.SATELLITE -> "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/$z/$y/$x"
     }
 
     private fun lonToWorldX(lon: Double, z: Int) = (lon + 180.0) / 360.0 * 2.0.pow(z) * TILE
@@ -79,87 +91,93 @@ object TileMap {
         height: Int,
         cornerRadiusPx: Float,
     ): Bitmap {
-        val scale = minOf(1f, MAX_BITMAP_SIDE.toFloat() / maxOf(width, height).coerceAtLeast(1))
-        val bw = (width * scale).toInt().coerceAtLeast(1)
-        val bh = (height * scale).toInt().coerceAtLeast(1)
-
-        val map = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888)
-        val c = Canvas(map)
-        c.scale(scale, scale)
+        // 1) Compose the map at full size with whole-pixel tile positions.
+        //    Scaling tiles one by one leaves faint lines on the seams, so we never do that.
+        val full = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val c = Canvas(full)
 
         val n = 2.0.pow(zoom).toInt()
         val cx = lonToWorldX(lng, zoom)
         val cy = latToWorldY(lat, zoom)
-        val left = cx - width / 2.0
-        val top = cy - height / 2.0
+        val left = floor(cx - width / 2.0).toLong()
+        val top = floor(cy - height / 2.0).toLong()
+        // Where the exact position falls inside the image (sub-pixel accurate).
+        val dotX = (cx - left).toFloat()
+        val dotY = (cy - top).toFloat()
 
-        val paint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG)
-        paint.colorFilter = tileColorFilter(darkMode)
+        // Dark mode dims the bright street map; satellite imagery is already dark enough.
+        val basePaint = Paint(Paint.FILTER_BITMAP_FLAG)
+        basePaint.colorFilter = tileColorFilter(darkMode && style == MapStyle.STANDARD)
+        val overlayPaint = Paint(Paint.FILTER_BITMAP_FLAG)
+        c.drawColor(placeholderPaint(darkMode).color)
 
-        val tx0 = floor(left / TILE).toInt()
-        val tx1 = floor((left + width) / TILE).toInt()
-        val ty0 = floor(top / TILE).toInt()
-        val ty1 = floor((top + height) / TILE).toInt()
-        for (ty in ty0..ty1) {
-            if (ty < 0 || ty >= n) continue
-            for (tx in tx0..tx1) {
-                val wx = ((tx % n) + n) % n
-                val tile = loadTile(context, style, zoom, wx, ty)
-                val dx = (tx * TILE - left).toFloat()
-                val dy = (ty * TILE - top).toFloat()
-                if (tile != null) {
-                    c.drawBitmap(tile, dx, dy, paint)
-                } else {
-                    c.drawRect(dx, dy, dx + TILE, dy + TILE, placeholderPaint(darkMode))
+        val tx0 = Math.floorDiv(left, TILE.toLong()).toInt()
+        val tx1 = Math.floorDiv(left + width, TILE.toLong()).toInt()
+        val ty0 = Math.floorDiv(top, TILE.toLong()).toInt()
+        val ty1 = Math.floorDiv(top + height, TILE.toLong()).toInt()
+        for (layer in layers(style)) {
+            for (ty in ty0..ty1) {
+                if (ty < 0 || ty >= n) continue
+                for (tx in tx0..tx1) {
+                    val wx = ((tx % n) + n) % n
+                    val tile = loadTile(context, layer, zoom, wx, ty) ?: continue
+                    val dx = (tx.toLong() * TILE - left).toFloat()
+                    val dy = (ty.toLong() * TILE - top).toFloat()
+                    c.drawBitmap(tile, dx, dy, if (layer.base) basePaint else overlayPaint)
                 }
             }
         }
 
-        drawLocationDot(c, width / 2f, height / 2f, accuracyMeters, metersPerPixel(lat, zoom), darkMode)
-        drawAttribution(c, width, height, attribution(style))
+        val density = context.resources.displayMetrics.density
+        drawLocationDot(c, dotX, dotY, accuracyMeters, metersPerPixel(lat, zoom), density)
+        drawAttribution(c, width, height, attribution(style), density)
 
-        // Round the corners by masking the result.
+        // 2) Shrink the finished image once (smooth), to keep the widget payload small.
+        val scale = minOf(1f, MAX_BITMAP_SIDE.toFloat() / maxOf(width, height))
+        val bw = (width * scale).toInt().coerceAtLeast(1)
+        val bh = (height * scale).toInt().coerceAtLeast(1)
+        val small = if (scale < 1f) Bitmap.createScaledBitmap(full, bw, bh, true).also { full.recycle() } else full
+
+        // 3) Round the corners (the widget also clips, this keeps older launchers tidy).
         val out = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888)
         val oc = Canvas(out)
         val mask = Paint(Paint.ANTI_ALIAS_FLAG)
         val r = cornerRadiusPx * scale
         oc.drawRoundRect(RectF(0f, 0f, bw.toFloat(), bh.toFloat()), r, r, mask)
         mask.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-        oc.drawBitmap(map, 0f, 0f, mask)
-        map.recycle()
+        oc.drawBitmap(small, 0f, 0f, mask)
+        small.recycle()
         return out
     }
 
-    private fun drawLocationDot(c: Canvas, x: Float, y: Float, accuracy: Float, mpp: Double, dark: Boolean) {
-        val blue = Color.rgb(30, 136, 229)
-        val radius = if (mpp > 0) (accuracy / mpp).toFloat().coerceIn(12f, 120f) else 12f
+    private fun drawLocationDot(c: Canvas, x: Float, y: Float, accuracy: Float, mpp: Double, density: Float) {
+        val blue = Color.rgb(26, 115, 232)
+        val minR = 10f * density
+        val radius = if (mpp > 0) (accuracy / mpp).toFloat().coerceIn(minR, 60f * density) else minR
         val halo = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = blue
-            alpha = if (dark) 60 else 40
+            alpha = 45
             style = Paint.Style.FILL
         }
         c.drawCircle(x, y, radius, halo)
-        val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = blue
-            alpha = 120
-            style = Paint.Style.STROKE
-            strokeWidth = 2f
+        val shadow = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            setShadowLayer(3f * density, 0f, 1f * density, Color.argb(90, 0, 0, 0))
         }
-        c.drawCircle(x, y, radius, ring)
-        val white = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE }
-        c.drawCircle(x, y, 14f, white)
+        c.drawCircle(x, y, 8f * density, shadow)
         val dot = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = blue }
-        c.drawCircle(x, y, 10f, dot)
+        c.drawCircle(x, y, 6f * density, dot)
     }
 
-    private fun drawAttribution(c: Canvas, w: Int, h: Int, text: String) {
+    private fun drawAttribution(c: Canvas, w: Int, h: Int, text: String, density: Float) {
         val p = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
-            textSize = 16f
-            setShadowLayer(3f, 0f, 0f, Color.BLACK)
+            textSize = 8f * density
+            setShadowLayer(2f * density, 0f, 0f, Color.BLACK)
         }
         val tw = p.measureText(text)
-        c.drawText(text, w - tw - 6f, h - 6f, p)
+        // Keep clear of the rounded corner.
+        c.drawText(text, w - tw - 14f * density, h - 6f * density, p)
     }
 
     private fun placeholderPaint(dark: Boolean) = Paint().apply {
@@ -181,16 +199,16 @@ object TileMap {
     }
 
     /** Memory cache, then disk cache, then network. Returns null if offline and not cached. */
-    private fun loadTile(context: Context, style: MapStyle, z: Int, x: Int, y: Int): Bitmap? {
-        val key = "${style.key}/$z/$x/$y"
+    private fun loadTile(context: Context, layer: Layer, z: Int, x: Int, y: Int): Bitmap? {
+        val key = "${layer.key}/$z/$x/$y"
         memCache().get(key)?.let { return it }
 
-        val file = File(context.cacheDir, "tiles/${style.key}/$z/$x/$y.png")
+        val file = File(context.cacheDir, "tiles/${layer.key}/$z/$x/$y.img")
         if (file.exists() && System.currentTimeMillis() - file.lastModified() < CACHE_TTL_MS) {
             BitmapFactory.decodeFile(file.path)?.let { memCache().put(key, it); return it }
         }
 
-        val bmp = download(tileUrl(style, z, x, y), file) ?: return if (file.exists()) {
+        val bmp = download(layer.url(z, x, y), file) ?: return if (file.exists()) {
             BitmapFactory.decodeFile(file.path)?.also { memCache().put(key, it) }
         } else null
         memCache().put(key, bmp)

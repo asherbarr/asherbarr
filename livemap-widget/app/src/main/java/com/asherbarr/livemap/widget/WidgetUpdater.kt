@@ -50,9 +50,13 @@ object WidgetUpdater {
         val minH = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 180)
         val maxW = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, minW)
         val maxH = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, minH)
-        // Use the larger of min/max so the map fills the cell in both orientations.
-        val wPx = (maxOf(minW, maxW) * density).toInt().coerceIn(120, 1200)
-        val hPx = (maxOf(minH, maxH) * density).toInt().coerceIn(120, 1200)
+        // Launchers report the real size as (minWidth x maxHeight) in portrait
+        // and (maxWidth x minHeight) in landscape.
+        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val wDp = if (landscape) maxW else minW
+        val hDp = if (landscape) minH else maxH
+        val wPx = (wDp * density).toInt().coerceIn(120, 1600)
+        val hPx = (hDp * density).toInt().coerceIn(120, 1600)
         val radius = 24 * density
         val dark = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
             Configuration.UI_MODE_NIGHT_YES
@@ -95,6 +99,10 @@ object WidgetUpdater {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             ),
         )
+        // Zoom buttons: handled by the widget provider, which redraws right away.
+        views.setOnClickPendingIntent(R.id.zoom_in, zoomIntent(context, LiveMapWidgetProvider.ACTION_ZOOM_IN))
+        views.setOnClickPendingIntent(R.id.zoom_out, zoomIntent(context, LiveMapWidgetProvider.ACTION_ZOOM_OUT))
+
         // Tap the status pill: open the app.
         views.setOnClickPendingIntent(
             R.id.status_text,
@@ -107,6 +115,13 @@ object WidgetUpdater {
 
         if (render) mgr.updateAppWidget(id, views) else mgr.partiallyUpdateAppWidget(id, views)
     }
+
+    private fun zoomIntent(context: Context, action: String): PendingIntent = PendingIntent.getBroadcast(
+        context,
+        if (action == LiveMapWidgetProvider.ACTION_ZOOM_IN) 10 else 11,
+        Intent(context, LiveMapWidgetProvider::class.java).setAction(action),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
 
     private fun statusText(context: Context, status: LiveStatus, fixTime: Long, tracking: Boolean): String {
         val time = if (fixTime > 0) SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(fixTime)) else null

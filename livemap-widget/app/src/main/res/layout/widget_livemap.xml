@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/map_clip"
+    android:clipToOutline="true">
 
     <ImageView
         android:id="@+id/map_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/open_in_maps" />
+
+    <!-- Zoom controls, like the Google Maps widget. -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:background="@drawable/zoom_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/zoom_in"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/zoom_in"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="#FFFFFFFF"
+            android:textSize="22sp" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#55FFFFFF" />
+
+        <TextView
+            android:id="@+id/zoom_out"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/zoom_out"
+            android:gravity="center"
+            android:text="−"
+            android:textColor="#FFFFFFFF"
+            android:textSize="22sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/status_text"

@@ -8,7 +8,7 @@ Built for Samsung Galaxy / One UI (Android 12 and newer). Written in Kotlin, bui
 
 ## ⬇️ Download & install
 
-1. On your phone, tap **[⬇️ LiveMap-v1.0.0.apk](https://github.com/asherbarr/asherbarr/releases/download/livemap-v1.0.0/LiveMap-v1.0.0.apk)** (or open the [release page](https://github.com/asherbarr/asherbarr/releases/tag/livemap-v1.0.0)).
+1. On your phone, tap **[⬇️ LiveMap-v1.1.0.apk](https://github.com/asherbarr/asherbarr/releases/download/livemap-v1.1.0/LiveMap-v1.1.0.apk)** (or open the [release page](https://github.com/asherbarr/asherbarr/releases/tag/livemap-v1.1.0)).
 2. Open the file. When Android asks, allow **Install unknown apps** for your browser or file manager.
 3. Open **LiveMap** → tap **Start tracking** → allow **Precise location** and **Notifications**.
 4. Long-press the home screen → **Widgets** → **LiveMap**, then drag it onto the screen and resize it however you like.
@@ -32,7 +32,8 @@ The release APK is shrunk with R8 (~2 MB) and signed with a debug key, so it ins
 | Tap → Google Maps | Official Maps URL `https://www.google.com/maps/search/?api=1&query=lat,lng`. Directions is one tap away |
 | Start / Stop | In the app, in Settings, and a **Stop** button on the notification |
 | Light / dark | Map tiles are dimmed in dark mode, and the app uses Material You dynamic colors |
-| Satellite | Esri World Imagery, as an alternative style |
+| Satellite with names | Esri World Imagery plus road and place-name overlays (Hebrew + English) |
+| Zoom from the widget | **+ / −** buttons in the corner, like the Google Maps widget (zoom 10–19) |
 
 ---
 
@@ -61,7 +62,7 @@ AppWidgetManager.partiallyUpdateAppWidget() ← time/status text only
 
 - **Moved?** The map is redrawn (re-centered under the blue dot). Usually 0 new downloads, because the nearby tiles are already cached.
 - **Didn't move?** Only the time text updates. No image is redrawn and nothing is downloaded.
-- The image is capped at 360 px on its longest side, so `RemoteViews` stays well under Android's binder size limit. On a big widget it looks slightly soft, and that's the trade-off.
+- The map is composed at full size (no seams between tiles), then shrunk once to at most 640 px on its longest side, so `RemoteViews` stays well under Android's binder size limit. On a big widget it looks slightly soft, and that's the trade-off.
 
 ### Files
 
@@ -86,7 +87,7 @@ app/src/main/java/com/asherbarr/livemap/
 | Option | Cost | Key | Why / why not |
 |---|---|---|---|
 | **OpenStreetMap** ✅ | Free | None | Full street, river and POI detail. Allowed for light use with caching, an identifying User-Agent and attribution |
-| **Esri World Imagery** (Satellite) ✅ | Free for non-commercial use | None | Good imagery. Attribution required. Commercial use needs an ArcGIS license |
+| **Esri World Imagery + Reference layers** (Satellite) ✅ | Free for non-commercial use | None | Imagery, roads and place names. Attribution required. Commercial use needs an ArcGIS license. Uses up to 3 tiles per map square, all cached |
 | Google Static Maps API | ~$2 per 1,000 maps after the free credit | Yes + billing | At one image per 5 s, it could cost money on a long drive |
 | Mapbox / MapTiler | Free tier, then paid | Yes | Good fallback if OSM ever rate-limits you |
 | Scraping Google Maps tiles | — | — | ❌ Breaks Google's Terms. Not used |

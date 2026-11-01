@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.location.Location
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
@@ -52,10 +53,26 @@ class TrackingService : Service() {
         }
 
         override fun onLocationAvailability(availability: LocationAvailability) {
-            if (!availability.isLocationAvailable && prefs.trackingEnabled) {
-                prefs.status = LiveStatus.UNAVAILABLE
-                WidgetUpdater.refreshAsync(applicationContext, render = false)
-            }
+            // Fused reports "unavailable" for short GPS gaps too, so only trust it once fixes stop.
+            if (!availability.isLocationAvailable) checkStale()
+        }
+    }
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val staleCheck = object : Runnable {
+        override fun run() {
+            checkStale()
+            handler.postDelayed(this, STALE_CHECK_MS)
+        }
+    }
+
+    /** Marks the widget "unavailable" only when no fix has arrived for a while. */
+    private fun checkStale() {
+        if (!prefs.trackingEnabled) return
+        val age = System.currentTimeMillis() - prefs.lastFixTime
+        if (age > STALE_AFTER_MS && prefs.status == LiveStatus.LIVE) {
+            prefs.status = LiveStatus.UNAVAILABLE
+            WidgetUpdater.refreshAsync(applicationContext, render = false)
         }
     }
 
@@ -99,6 +116,8 @@ class TrackingService : Service() {
         if (prefs.status != LiveStatus.LIVE) prefs.status = LiveStatus.WAITING
         requestUpdates()
         updating = true
+        handler.removeCallbacks(staleCheck)
+        handler.postDelayed(staleCheck, STALE_CHECK_MS)
         WidgetUpdater.refreshAsync(applicationContext, render = true)
         return START_STICKY
     }
@@ -147,6 +166,7 @@ class TrackingService : Service() {
     }
 
     private fun stopTracking() {
+        handler.removeCallbacks(staleCheck)
         if (updating) fused.removeLocationUpdates(callback)
         updating = false
         prefs.trackingEnabled = false
@@ -157,6 +177,7 @@ class TrackingService : Service() {
     }
 
     override fun onDestroy() {
+        handler.removeCallbacks(staleCheck)
         if (updating) fused.removeLocationUpdates(callback)
         updating = false
         super.onDestroy()
@@ -189,6 +210,8 @@ class TrackingService : Service() {
         const val ACTION_START = "com.asherbarr.livemap.action.START"
         const val ACTION_STOP = "com.asherbarr.livemap.action.STOP"
         const val ACTION_RELOAD = "com.asherbarr.livemap.action.RELOAD"
+        private const val STALE_AFTER_MS = 30_000L
+        private const val STALE_CHECK_MS = 10_000L
         private const val NOTIF_TRACKING = 1001
         private const val NOTIF_RESUME = 1002
         private const val CHANNEL_TRACKING = "tracking"
