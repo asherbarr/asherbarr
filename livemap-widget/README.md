@@ -8,7 +8,7 @@ Built for Samsung Galaxy / One UI (Android 12 and newer). Written in Kotlin, bui
 
 ## ⬇️ Download & install
 
-1. On your phone, tap **[⬇️ LiveMap-v1.1.0.apk](https://github.com/asherbarr/asherbarr/releases/download/livemap-v1.1.0/LiveMap-v1.1.0.apk)** (or open the [release page](https://github.com/asherbarr/asherbarr/releases/tag/livemap-v1.1.0)).
+1. On your phone, tap **[⬇️ LiveMap-v1.1.1.apk](https://github.com/asherbarr/asherbarr/releases/download/livemap-v1.1.1/LiveMap-v1.1.1.apk)** (or open the [release page](https://github.com/asherbarr/asherbarr/releases/tag/livemap-v1.1.1)).
 2. Open the file. When Android asks, allow **Install unknown apps** for your browser or file manager.
 3. Open **LiveMap** → tap **Start tracking** → allow **Precise location** and **Notifications**.
 4. Long-press the home screen → **Widgets** → **LiveMap**, then drag it onto the screen and resize it however you like.

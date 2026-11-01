@@ -32,7 +32,8 @@
             android:textColor="#FFFFFFFF"
             android:textSize="22sp" />
 
-        <View
+        <!-- Divider. Widgets only allow certain views (no plain View), so use a FrameLayout. -->
+        <FrameLayout
             android:layout_width="20dp"
             android:layout_height="1dp"
             android:layout_gravity="center_horizontal"
